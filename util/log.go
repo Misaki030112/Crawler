@@ -6,5 +6,5 @@ var Log *log.Logger
 
 func init() {
 	Log = log.Default()
-	log.SetFlags(log.Ldate | log.Llongfile | log.Ltime)
+	Log.SetFlags(log.Ldate | log.Ltime | log.Llongfile)
 }
