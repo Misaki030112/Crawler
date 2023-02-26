@@ -5,11 +5,12 @@ import (
 	"github.com/gocolly/colly/v2"
 	"log"
 	"strings"
+	"world.misaki.go/crawler/domain"
 )
 
-func (b BaoCrawler) CrawlOneBook(bookDetailUrl string) *Book {
+func CrawlOneBook(b *domain.BookCrawler, bookDetailUrl string) *domain.Book {
 	log.Print("will crawl one book the book url:", bookDetailUrl)
-	book := &Book{}
+	book := &domain.Book{}
 
 	b.MainCollector.OnHTML(".container", func(e *colly.HTMLElement) {
 		BookDetailParse(e, book)
@@ -29,6 +30,7 @@ func (b BaoCrawler) CrawlOneBook(bookDetailUrl string) *Book {
 			bookContent, exist := s.Find("a").Attr("href")
 			if !exist {
 				log.Fatal("can not find the chapter button ....")
+				return
 			}
 			if strings.Contains(bookContent, "vip") {
 				// TODO implement login Crawl to crawl some vip chapters,or Optimized to stop the execution of the entire Each when encountering a VIP
@@ -43,7 +45,7 @@ func (b BaoCrawler) CrawlOneBook(bookDetailUrl string) *Book {
 
 	b.Deputies["BookContent"].OnHTML(".container", func(e *colly.HTMLElement) {
 		BookChapterParse(e, book)
-		book.StoragePath = BookPath(book.BookName, b.StoragePath)
+		book.StoragePath = domain.BookPath(book.BookName, b.StoragePath)
 	})
 
 	if b.MainCollector.Visit(bookDetailUrl) != nil {

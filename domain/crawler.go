@@ -1,4 +1,4 @@
-package sf
+package domain
 
 import (
 	"github.com/gocolly/colly/v2"
@@ -7,12 +7,11 @@ import (
 )
 
 const (
-	DOMAIN        = "book.sfacg.com"
 	DEFAULT_CACHE = "cache"
 	STORAGE_PATH  = "storage"
 )
 
-type BaoCrawler struct {
+type BookCrawler struct {
 	MainCollector *colly.Collector
 	// the other collector
 	Deputies map[string]*colly.Collector
@@ -26,23 +25,24 @@ type BaoCrawler struct {
 	deputiesCount uint16
 }
 
-func (b BaoCrawler) TargetDomain() string {
+func (b BookCrawler) TargetDomain() string {
 	return b.targetDomain
 }
 
-func (b BaoCrawler) CacheDir() string {
+func (b BookCrawler) CacheDir() string {
 	return b.cacheDir
 }
 
-func (b BaoCrawler) DeputiesCount() uint16 {
+func (b BookCrawler) DeputiesCount() uint16 {
 	return b.deputiesCount
 }
 
-func NewBaoCrawler() *BaoCrawler {
-	c := &BaoCrawler{}
+func NewBookCrawler(DOMAIN string) *BookCrawler {
+	c := &BookCrawler{}
 	c.StoragePath = STORAGE_PATH
 	c.MainCollector = colly.NewCollector(
 		colly.AllowedDomains(DOMAIN),
+		colly.MaxDepth(0x3fff),
 		colly.CacheDir(DEFAULT_CACHE),
 		colly.IgnoreRobotsTxt(),
 	)
@@ -56,7 +56,7 @@ func NewBaoCrawler() *BaoCrawler {
 	return c
 }
 
-func (b BaoCrawler) CleanCache() bool {
+func (b BookCrawler) CleanCache() bool {
 	if os.RemoveAll(b.cacheDir) != nil {
 		log.Print("remove crawl cache error ....")
 		return false

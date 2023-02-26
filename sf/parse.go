@@ -7,10 +7,11 @@ import (
 	"log"
 	"regexp"
 	"strconv"
+	"world.misaki.go/crawler/domain"
 )
 
 // BookDetailParse Parse the basic information of the book details page
-func BookDetailParse(html *colly.HTMLElement, book *Book) {
+func BookDetailParse(html *colly.HTMLElement, book *domain.Book) {
 	dom := html.DOM
 	book.BookName = dom.Find(".title").Children().First().Text()
 	//coverImage := book.BookName + ".jpg"
@@ -30,9 +31,9 @@ func BookDetailParse(html *colly.HTMLElement, book *Book) {
 }
 
 // BookChapterParse Parse the Book Content of the one Book Chapter page
-func BookChapterParse(html *colly.HTMLElement, book *Book) {
+func BookChapterParse(html *colly.HTMLElement, book *domain.Book) {
 	dom := html.DOM
-	chapter := BookContent{}
+	chapter := domain.BookContent{}
 	chapter.ChapterName = dom.Find(".article-title").Text()
 	by := bytes.Buffer{}
 	dom.Find("#ChapterBody").Children().Each(func(i int, e *goquery.Selection) {

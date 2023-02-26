@@ -4,6 +4,7 @@ import (
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gocolly/colly/v2"
 	"testing"
+	"world.misaki.go/crawler/domain"
 	"world.misaki.go/crawler/sf"
 )
 
@@ -12,7 +13,7 @@ func TestBookChapterParse(t *testing.T) {
 	e := &colly.HTMLElement{DOM: document.Selection}
 	type args struct {
 		html *colly.HTMLElement
-		book *sf.Book
+		book *domain.Book
 	}
 	tests := []struct {
 		name string
@@ -23,8 +24,8 @@ func TestBookChapterParse(t *testing.T) {
 			name: "https://book.sfacg.com/Novel/589345/779722/6960479/",
 			args: args{
 				html: e,
-				book: &sf.Book{
-					Contents: make([]sf.BookContent, 0, 100),
+				book: &domain.Book{
+					Contents: make([]domain.BookContent, 0, 100),
 				},
 			},
 		},
@@ -39,7 +40,7 @@ func TestBookChapterParse(t *testing.T) {
 func TestBookDetailParse(t *testing.T) {
 	type args struct {
 		html *colly.HTMLElement
-		book *sf.Book
+		book *domain.Book
 	}
 	tests := []struct {
 		name string
